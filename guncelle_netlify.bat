@@ -35,9 +35,28 @@ echo.
 echo [4/5] Dosyalar GitHub'a gonderiliyor...
 git add .
 git commit -m "Otomatik guncelleme - %date% %time%"
-git push -u origin main
+
+:: Güncellenen kısım: Hangi dalda olduğumuzu bul ve ona göre push et
+git branch
+echo.
+echo Yukaridaki listeden mevcut dal adini kontrol ediyorum...
+for /f "tokens=2" %%i in ('git branch ^| find "*"') do set branch=%%i
+echo Mevcut dal adi: %branch%
+echo.
+
+if "%branch%"=="" (
+    echo UYARI: Dal adi bulunamadi, 'master' olarak ayarlaniyor...
+    set branch=master
+)
+
+echo GitHub'a gonderiliyor (dal: %branch%)...
+git push -u origin %branch%
+
 if errorlevel 1 (
     echo HATA: GitHub'a gonderilemedi!
+    echo.
+    echo Cozum onerisi: Eger bu ilk gonderiminizse, su komutu calistirip tekrar deneyin:
+    echo git push -u origin master --force
     pause
     exit /b 1
 )
