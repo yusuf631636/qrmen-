@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dijital Menü - QR kod ile hızlıca menüye ulaşın">
+  <title>Dijital Menü</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/menu.css">
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader" class="loader">
+    <div class="loader-spinner"></div>
+    <p>Menü Yükleniyor...</p>
+  </div>
+
+  <!-- Hero Section -->
+  <header id="hero" class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-particles" id="particles"></div>
+    <div class="hero-content">
+      <div class="hero-logo" id="heroLogo"></div>
+      <h1 id="restaurantName" class="hero-title">Restoran</h1>
+      <p id="restaurantSlogan" class="hero-slogan">Lezzetin Adresi</p>
+      <div class="hero-info">
+        <span id="heroPhone" class="hero-info-item" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <span id="phoneText"></span>
+        </span>
+        <span id="heroWifi" class="hero-info-item" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>
+          WiFi: <span id="wifiText"></span>
+        </span>
+      </div>
+      <button class="hero-scroll-btn" onclick="document.getElementById('menuSection').scrollIntoView({behavior:'smooth'})">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Search Bar -->
+  <div class="search-container" id="searchContainer">
+    <div class="search-box">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Menüde ara..." autocomplete="off">
+      <button id="searchClear" class="search-clear" style="display:none">&times;</button>
+    </div>
+  </div>
+
+  <!-- Category Navigation -->
+  <nav class="category-nav" id="categoryNav">
+    <div class="category-nav-inner" id="categoryNavInner">
+      <!-- Categories will be injected -->
+    </div>
+  </nav>
+
+  <!-- Menu Section -->
+  <main id="menuSection" class="menu-section">
+    <div id="menuContent" class="menu-content">
+      <!-- Menu items will be injected -->
+    </div>
+    <div id="emptyState" class="empty-state" style="display:none">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 3h18v18H3zM12 8v8M8 12h8"/></svg>
+      <p>Henüz menüde ürün bulunmuyor</p>
+    </div>
+    <div id="searchEmpty" class="empty-state" style="display:none">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <p>Aramanızla eşleşen ürün bulunamadı</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="menu-footer">
+    <div class="footer-content">
+      <p id="footerAddress" style="display:none"></p>
+      <a id="footerInsta" href="#" target="_blank" style="display:none" class="footer-social">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <span id="instaText"></span>
+      </a>
+      <div class="footer-powered">
+        <span>Powered by</span> <strong>QR Menü</strong>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/menu.js"></script>
+</body>
+</html>
