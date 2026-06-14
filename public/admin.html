@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Menü - Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <!-- Login / Setup Screen -->
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M7 7h3v3H7zM14 7h3v3h-3zM7 14h3v3H7z"/>
+          <path d="M14 14h1v1h-1zM17 14h0M14 17h0M17 17h0"/>
+        </svg>
+        <h1>QR Menü</h1>
+        <p id="authSubtitle">Admin Panel</p>
+      </div>
+      <!-- Setup Form -->
+      <form id="setupForm" style="display:none" onsubmit="return handleSetup(event)">
+        <h2>İlk Kurulum</h2>
+        <p class="auth-hint">Admin hesabınızı oluşturun</p>
+        <div class="form-group">
+          <label>Kullanıcı Adı</label>
+          <input type="text" id="setupUsername" required minlength="3" placeholder="admin">
+        </div>
+        <div class="form-group">
+          <label>Şifre</label>
+          <input type="password" id="setupPassword" required minlength="4" placeholder="••••••">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Hesap Oluştur</button>
+      </form>
+      <!-- Login Form -->
+      <form id="loginForm" style="display:none" onsubmit="return handleLogin(event)">
+        <div class="form-group">
+          <label>Kullanıcı Adı</label>
+          <input type="text" id="loginUsername" required placeholder="admin">
+        </div>
+        <div class="form-group">
+          <label>Şifre</label>
+          <input type="password" id="loginPassword" required placeholder="••••••">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Giriş Yap</button>
+        <p id="loginError" class="auth-error" style="display:none"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="dashboard" class="dashboard" style="display:none">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M7 7h3v3H7zM14 7h3v3h-3zM7 14h3v3H7z"/>
+          <path d="M14 14h1v1h-1zM17 14h0M14 17h0M17 17h0"/>
+        </svg>
+        <span>QR Menü</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-page="overview" onclick="showPage('overview')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Genel Bakış</span>
+        </button>
+        <button class="nav-item" data-page="categories" onclick="showPage('categories')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+          <span>Kategoriler</span>
+        </button>
+        <button class="nav-item" data-page="products" onclick="showPage('products')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span>Ürünler</span>
+        </button>
+        <button class="nav-item" data-page="settings" onclick="showPage('settings')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          <span>Ayarlar</span>
+        </button>
+        <button class="nav-item" data-page="qrcode" onclick="showPage('qrcode')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h1v1h-1zM18 14h1v1h-1zM14 18h1v1h-1zM18 18h1v1h-1zM16 16h1v1h-1z"/></svg>
+          <span>QR Kod</span>
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="nav-item" onclick="handleLogout()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          <span>Çıkış Yap</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+      <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <span>QR Menü Admin</span>
+    </div>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Overview Page -->
+      <div id="page-overview" class="page active">
+        <div class="page-header">
+          <h2>Genel Bakış</h2>
+          <p>Menü istatistikleriniz</p>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card stat-orange">
+            <div class="stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+            <div class="stat-info"><span id="statCategories">0</span><label>Kategori</label></div>
+          </div>
+          <div class="stat-card stat-blue">
+            <div class="stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+            <div class="stat-info"><span id="statProducts">0</span><label>Toplam Ürün</label></div>
+          </div>
+          <div class="stat-card stat-green">
+            <div class="stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+            <div class="stat-info"><span id="statActive">0</span><label>Aktif Ürün</label></div>
+          </div>
+          <div class="stat-card stat-purple">
+            <div class="stat-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+            <div class="stat-info"><span id="statFeatured">0</span><label>Öne Çıkan</label></div>
+          </div>
+        </div>
+        <div class="quick-actions">
+          <h3>Hızlı İşlemler</h3>
+          <div class="actions-grid">
+            <button class="action-card" onclick="showPage('categories')">
+              <span class="action-icon">📁</span>
+              <span>Kategori Ekle</span>
+            </button>
+            <button class="action-card" onclick="showPage('products')">
+              <span class="action-icon">🍕</span>
+              <span>Ürün Ekle</span>
+            </button>
+            <button class="action-card" onclick="showPage('settings')">
+              <span class="action-icon">🎨</span>
+              <span>Tema Ayarla</span>
+            </button>
+            <button class="action-card" onclick="showPage('qrcode')">
+              <span class="action-icon">📱</span>
+              <span>QR Kod Al</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories Page -->
+      <div id="page-categories" class="page">
+        <div class="page-header">
+          <h2>Kategoriler</h2>
+          <button class="btn btn-primary" onclick="openCategoryModal()">+ Yeni Kategori</button>
+        </div>
+        <div id="categoriesList" class="items-grid"></div>
+        <div id="categoriesEmpty" class="empty-state-admin" style="display:none">
+          <p>Henüz kategori eklenmemiş</p>
+          <button class="btn btn-primary" onclick="openCategoryModal()">İlk Kategoriyi Ekle</button>
+        </div>
+      </div>
+
+      <!-- Products Page -->
+      <div id="page-products" class="page">
+        <div class="page-header">
+          <h2>Ürünler</h2>
+          <button class="btn btn-primary" onclick="openProductModal()">+ Yeni Ürün</button>
+        </div>
+        <div class="filter-bar">
+          <select id="productCategoryFilter" onchange="filterProducts()">
+            <option value="">Tüm Kategoriler</option>
+          </select>
+        </div>
+        <div id="productsList" class="items-grid products-grid"></div>
+        <div id="productsEmpty" class="empty-state-admin" style="display:none">
+          <p>Henüz ürün eklenmemiş</p>
+          <button class="btn btn-primary" onclick="openProductModal()">İlk Ürünü Ekle</button>
+        </div>
+      </div>
+
+      <!-- Settings Page -->
+      <div id="page-settings" class="page">
+        <div class="page-header">
+          <h2>Restoran Ayarları</h2>
+          <button class="btn btn-primary" onclick="saveSettings()">Kaydet</button>
+        </div>
+        <div class="settings-form">
+          <div class="settings-section">
+            <h3>Genel Bilgiler</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Restoran Adı</label>
+                <input type="text" id="setName" placeholder="Restoran Adı">
+              </div>
+              <div class="form-group">
+                <label>Slogan</label>
+                <input type="text" id="setSlogan" placeholder="Lezzetin Adresi">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Telefon</label>
+                <input type="text" id="setPhone" placeholder="0500 000 00 00">
+              </div>
+              <div class="form-group">
+                <label>WiFi Şifresi</label>
+                <input type="text" id="setWifi" placeholder="wifi12345">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Adres</label>
+              <textarea id="setAddress" rows="2" placeholder="Restoran adresi"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Instagram</label>
+              <input type="text" id="setInstagram" placeholder="@restoran">
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3>Görünüm</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Ana Renk</label>
+                <div class="color-input">
+                  <input type="color" id="setPrimary" value="#e67e22">
+                  <input type="text" id="setPrimaryText" value="#e67e22" maxlength="7">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>İkincil Renk</label>
+                <div class="color-input">
+                  <input type="color" id="setSecondary" value="#2c3e50">
+                  <input type="text" id="setSecondaryText" value="#2c3e50" maxlength="7">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Vurgu Renk</label>
+                <div class="color-input">
+                  <input type="color" id="setAccent" value="#e74c3c">
+                  <input type="text" id="setAccentText" value="#e74c3c" maxlength="7">
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tema</label>
+                <select id="setTheme">
+                  <option value="dark">Karanlık</option>
+                  <option value="light">Aydınlık</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Para Birimi</label>
+                <select id="setCurrency">
+                  <option value="₺">₺ TRY</option>
+                  <option value="$">$ USD</option>
+                  <option value="€">€ EUR</option>
+                  <option value="£">£ GBP</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3>Logo</h3>
+            <div class="logo-upload">
+              <div id="logoPreview" class="logo-preview-box">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span>Logo Yükle</span>
+              </div>
+              <input type="file" id="logoInput" accept="image/*" style="display:none" onchange="uploadLogo()">
+              <button class="btn btn-outline" onclick="document.getElementById('logoInput').click()">Dosya Seç</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QR Code Page -->
+      <div id="page-qrcode" class="page">
+        <div class="page-header">
+          <h2>QR Kod</h2>
+        </div>
+        <div class="qr-container">
+          <div class="qr-card">
+            <div id="qrPreview" class="qr-preview">
+              <div class="qr-loading">QR Kod Oluşturuluyor...</div>
+            </div>
+            <p class="qr-url" id="qrUrl"></p>
+            <div class="qr-actions">
+              <button class="btn btn-primary" onclick="downloadQR()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                PNG İndir
+              </button>
+              <button class="btn btn-outline" onclick="printQR()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Yazdır
+              </button>
+            </div>
+          </div>
+          <div class="qr-instructions">
+            <h3>QR Kod Kullanımı</h3>
+            <ol>
+              <li>QR kodu indirin veya yazdırın</li>
+              <li>Masalara, menü kartlarına veya duvarlara yerleştirin</li>
+              <li>Müşteriler telefonlarıyla tarayarak menünüze ulaşsın</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Category Modal -->
+  <div id="categoryModal" class="modal-overlay" style="display:none">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="categoryModalTitle">Yeni Kategori</h3>
+        <button class="modal-close" onclick="closeCategoryModal()">&times;</button>
+      </div>
+      <form onsubmit="return saveCategory(event)">
+        <input type="hidden" id="catEditId">
+        <div class="form-group">
+          <label>Kategori Adı</label>
+          <input type="text" id="catName" required placeholder="Başlangıçlar">
+        </div>
+        <div class="form-group">
+          <label>Açıklama</label>
+          <input type="text" id="catDesc" placeholder="İsteğe bağlı">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>İkon (Emoji)</label>
+            <input type="text" id="catIcon" placeholder="🍽️" maxlength="4">
+          </div>
+          <div class="form-group">
+            <label>Sıralama</label>
+            <input type="number" id="catOrder" value="0" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="catActive" checked> Aktif
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeCategoryModal()">İptal</button>
+          <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="productModal" class="modal-overlay" style="display:none">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="productModalTitle">Yeni Ürün</h3>
+        <button class="modal-close" onclick="closeProductModal()">&times;</button>
+      </div>
+      <form onsubmit="return saveProduct(event)" enctype="multipart/form-data">
+        <input type="hidden" id="prodEditId">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ürün Adı *</label>
+            <input type="text" id="prodName" required placeholder="Margherita Pizza">
+          </div>
+          <div class="form-group">
+            <label>Kategori *</label>
+            <select id="prodCategory" required></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Açıklama</label>
+          <textarea id="prodDesc" rows="2" placeholder="Taze mozzarella, domates sos, fesleğen"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fiyat *</label>
+            <input type="number" id="prodPrice" required step="0.01" min="0" placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label>Sıralama</label>
+            <input type="number" id="prodOrder" value="0" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Alerjenler</label>
+          <input type="text" id="prodAllergens" placeholder="Gluten, Süt (virgülle ayırın)">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="prodAvailable" checked> Mevcut
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="prodFeatured"> Öne Çıkan
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Ürün Görseli</label>
+          <div class="image-upload">
+            <div id="prodImagePreview" class="image-preview-box">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Görsel Ekle</span>
+            </div>
+            <input type="file" id="prodImage" accept="image/*" style="display:none" onchange="previewProductImage()">
+            <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('prodImage').click()">Dosya Seç</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeProductModal()">İptal</button>
+          <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" style="display:none"></div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
